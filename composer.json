@@ -1,0 +1,13 @@
+{
+	"license": "GPL-3.0",
+	"authors": [
+		{
+			"name": "Julien Fontanet",
+			"email": "julien.fontanet@vates.fr"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3",
+		"zendframework/zendframework": "~2.0"
+	}
+}
