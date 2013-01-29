@@ -70,7 +70,14 @@ final class Module
 				'Selkie\Model\BatchTable' =>  function($sm) {
 					return new BatchTable(
 						$sm->get('Selkie\Model\BatchGateway'),
+						$sm->get('Selkie\Model\VoucherGateway'),
 						$sm->get('Selkie\pfSense')
+					);
+				},
+				'Selkie\Model\VoucherGateway' => function ($sm) {
+					return new TableGateway(
+						'voucher',
+						$sm->get('Zend\Db\Adapter\Adapter')
 					);
 				},
 				'Selkie\Model\BatchGateway' => function ($sm) {

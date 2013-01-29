@@ -53,7 +53,12 @@ final class pfSense
 			)
 		);
 
-		return $response;
+		if (303 != $response['code'])
+		{
+			return false;
+		}
+
+		return json_decode($response['data'], true);
 	}
 
 	/**
@@ -66,7 +71,7 @@ final class pfSense
 			$this->_url.'/roll/'.$id
 		);
 
-		return $response['data'];
+		return json_decode($response['data'], true);
 	}
 
 	/**
@@ -100,27 +105,32 @@ final class pfSense
 		$data = http_build_query(null === $data ? array() : $data);
 		$len  = strlen($data);
 
-		$ctx = stream_context_create(array('http' => array(
-			'method'  => $method,
-			'content' => $data,
-			'header'  => array(
-				'AUTH: '.$this->_key,
-				'Content-Type: application/x-www-form-urlencoded',
-				'Content-Length: '.$len,
+		$ctx = stream_context_create(array(
+			'http' => array(
+				'method'  => $method,
+				'content' => $data,
+				'header'  => array(
+					'AUTH: '.$this->_key,
+					'Content-Type: application/x-www-form-urlencoded',
+					'Content-Length: '.$len,
+				),
+				'ignore_errors' => true,
 			),
-			'ignore_errors' => true,
-		)));
+			'ssl' => array(
+				'allow_self_signed' => true,
+			)
+		));
 
 		$data = file_get_contents($url, false, $ctx);
 
+
+		// @todo Properly handles “HTTP/*” not in first item.
 		if (!preg_match(
-			',^HTTP/1.1 ([0-9]+).*$,',
+			',^HTTP/1.[01] ([0-9]+).*$,',
 			$http_response_header[0],
 			$matches
 		))
 		{
-			// @todo remove
-			var_export(array($url, $data, $matches));
 			throw new \Exception('invalid HTTP response');
 		}
 		unset($http_response_header[0]);
@@ -132,8 +142,12 @@ final class pfSense
 		);
 		foreach ($http_response_header as $header)
 		{
-			list($key, $value) = explode(',', $header, 2);
-			$response['headers'][$key] = $value;
+			$_ = explode(':', $header, 2);
+			if (2 !== count($_))
+			{
+				continue;
+			}
+			$response['headers'][$_[0]] = trim($_[1]);
 		}
 
 		return $response;

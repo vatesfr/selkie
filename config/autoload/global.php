@@ -39,7 +39,7 @@ return array(
 
 	'pfsense' => array(
 		'url' => 'https://192.168.1.10/cp.php',
-		'key' => 'admin',
+		'key' => 'directeur+oriflamme',
 	),
 
 	'jasper' => array(

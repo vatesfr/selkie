@@ -46,6 +46,9 @@ CREATE TABLE "batch"
     -- Number of batchs generated.
     "printed" BOOLEAN NOT NULL DEFAULT FALSE,
 
+    -- Identifier in pfSense.
+    "pfs_id" INTEGER NOT NULL,
+
     PRIMARY KEY ("id")
 );
 
@@ -55,7 +58,7 @@ CREATE TABLE "voucher"
     "batch_id" INTEGER NOT NULL,
 
     -- Unique identifier.
-    "id" SERIAL,
+    "id" TEXT NOT NULL,
 
     PRIMARY KEY ("id"),
     FOREIGN KEY ("batch_id") REFERENCES "batch" ("id")

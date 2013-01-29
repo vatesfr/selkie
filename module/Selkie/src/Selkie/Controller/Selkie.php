@@ -46,7 +46,7 @@ final class Selkie extends AbstractActionController
 		$pf = $this->getServiceLocator()->get('Selkie\pfSense');
 
 		header('Content-Type: text/plain');
-		var_export($pf->createRoll(0, 10, 30));
+		var_export($pf->createRoll(2, 10, 10));
 	}
 
 	function indexAction()
@@ -96,11 +96,11 @@ final class Selkie extends AbstractActionController
 				}
 				unset($data['activated']);
 
-				// @todo Creates the vouchers.
-				// @todo Activates them if necessary.
+				// @todo Activates the vouchers if necessary.
 
-				$batch->exchangeArray($form->getData());
-				$this->getTable()->save($batch);
+				$data = $form->getData();
+				$batch->exchangeArray($data);
+				$this->getTable()->save($batch, $data['number']);
 
 				return $this->redirect()->toRoute('selkie');
 			}

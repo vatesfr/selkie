@@ -66,6 +66,11 @@ final class Batch
 	public $printed;
 
 	/**
+	 * @var integer
+	 */
+	public $pfs_id;
+
+	/**
 	 *
 	 */
 	function exchangeArray(array $data)

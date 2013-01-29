@@ -23,30 +23,36 @@
 
 namespace Selkie\Model;
 
-user Selkie\pfSense;
+use Selkie\pfSense;
 
 use Zend\Db\TableGateway\TableGateway;
 
 final class BatchTable
 {
-	protected $tableGateway;
-	protected $pfSense;
+	protected $_tblBatch;
+	protected $_tblVoucher;
+	protected $_pfSense;
 
-	function __construct(TableGateway $tableGateway, pfSense $pfSense)
+	function __construct(
+		TableGateway $tblBatch,
+		TableGateway $tblVoucher,
+		pfSense $pfSense
+	)
 	{
-		$this->tableGateway = $tableGateway;
-		$this->pfSense      = $pfSense;
+		$this->_tblBatch   = $tblBatch;
+		$this->_tblVoucher = $tblVoucher;
+		$this->_pfSense    = $pfSense;
 	}
 
 	function getAll($where = null)
 	{
-		return $this->tableGateway->select($where);
+		return $this->_tblBatch->select($where);
 	}
 
 	function get($id)
 	{
 		$id     = (int) $id;
-		$rowset = $this->tableGateway->select(array('id' => $id));
+		$rowset = $this->_tblBatch->select(array('id' => $id));
 		$row    = $rowset->current();
 		if (!$row)
 		{
@@ -55,21 +61,13 @@ final class BatchTable
 		return $row;
 	}
 
-	function save(Batch $batch)
+	function save(Batch $batch, $number = 1)
 	{
-		$fields = array(
-			'creator',
-			'comment',
-			'duration',
-			'creation',
-			'activation',
-			'number',
-		);
-
 		$data = array();
-		foreach ($fields as $field)
+		foreach (array_keys(get_object_vars($batch)) as $field)
 		{
-			if (isset($batch->$field))
+			if (('id' !== $field)
+			    && isset($batch->$field))
 			{
 				$data[$field] = $batch->$field;
 			}
@@ -78,15 +76,36 @@ final class BatchTable
 		$id = (int) $batch->id;
 		if ($id === 0)
 		{
-			$this->pfSense->createRoll(rand());
+			$tries = 10;
+			do
+			{
+				$pfs_id = mt_rand(0, 65535);
+				$roll = $this->_pfSense->createRoll($pfs_id, $data['duration'], $number, $data['comment']);
+			} while (!$roll && --$tries);
+			if (!$tries)
+			{
+				throw new \Exception('failed to create the batch');
+			}
 
-			$this->tableGateway->insert($data);
+			$data['pfs_id'] = $pfs_id;
+			$this->_tblBatch->insert($data);
+
+			// @todo Bug in Zend Framework 2.
+			$id = $this->_tblBatch->getAdapter()->getDriver()->getConnection()->getLastGeneratedValue('batch_id_seq');
+
+			foreach ($roll['vouchers'] as $voucher)
+			{
+				$this->_tblVoucher->insert(array(
+					'batch_id' => $id,
+					'id'       => $voucher,
+				));
+			}
 		}
 		else
 		{
 			if ($this->get($id))
 			{
-				$this->tableGateway->update($data, array('id' => $id));
+				$this->_tblBatch->update($data, array('id' => $id));
 			}
 			else
 			{
@@ -97,6 +116,7 @@ final class BatchTable
 
 	function deleteBatch($id)
 	{
-		$this->tableGateway->delete(array('id' => $id));
+		$this->_tblVoucher->delete(array('batch_id' => $id));
+		$this->_tblBatch->delete(array('id' => $id));
 	}
 }
