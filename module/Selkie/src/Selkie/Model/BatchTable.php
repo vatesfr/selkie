@@ -119,12 +119,15 @@ final class BatchTable
 		}
 	}
 
-	function deleteBatch($id)
+	function deleteBatch($batch)
 	{
-		$batch = $this->get($id);
+		if (is_numeric($batch))
+		{
+			$batch = $this->get($id);
+		}
 
-		$this->_tblVoucher->delete(array('batch_id' => $id));
-		$this->_tblBatch->delete(array('id' => $id));
+		$this->_tblVoucher->delete(array('batch_id' => $batch->id));
+		$this->_tblBatch->delete(array('id' => $batch->id));
 
 		$this->_pfSense->deleteRoll($batch->pfs_id);
 	}

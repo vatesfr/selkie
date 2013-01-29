@@ -40,15 +40,6 @@ use Zend\View\Model\ViewModel;
  */
 final class Selkie extends AbstractActionController
 {
-	// @todo remove
-	function testAction()
-	{
-		$pf = $this->getServiceLocator()->get('Selkie\pfSense');
-
-		header('Content-Type: text/plain');
-		var_export($pf->createRoll(2, 10, 10));
-	}
-
 	function indexAction()
 	{
 		$admin    = $this->_isAdmin();
@@ -86,7 +77,7 @@ final class Selkie extends AbstractActionController
 			if ($form->isValid())
 			{
 				$data = $form->getData();
-				if ($data['activated'] || !$this->_isAdmin())
+				if (isset($data['activated']) || !$this->_isAdmin())
 				{
 					$data['activation'] = date('c');
 				}
@@ -98,7 +89,6 @@ final class Selkie extends AbstractActionController
 
 				// @todo Activates the vouchers if necessary.
 
-				$data = $form->getData();
 				$batch->exchangeArray($data);
 				$this->getTable()->save($batch, $data['number']);
 
@@ -157,6 +147,22 @@ final class Selkie extends AbstractActionController
 
 		header('Content-Type: application/pdf');
 		echo $pdf;
+		exit;
+	}
+
+	function cleanAction()
+	{
+		$where = function (Select $select) {
+			// SQL to get all past batches.
+			$select->where('activation + CAST(duration || \' minutes\' AS INTERVAl) < NOW()');
+		};
+
+		$bg = $this->getServiceLocator()->get('Selkie\Model\BatchTable');
+		foreach ($bg->getAll($where) as $batch)
+		{
+			$bg->deleteBatch($batch);
+		}
+
 		exit;
 	}
 
