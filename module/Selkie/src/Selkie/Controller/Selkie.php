@@ -23,9 +23,9 @@
 
 namespace Selkie\Controller;
 
-use Selkie\Form\Batch as BatchForm;
+use Selkie\Form\Roll as RollForm;
 use Selkie\Form\LogIn as LogInForm;
-use Selkie\Model\Batch;
+use Selkie\Model\Roll;
 
 use Zend\Db\Sql\Select;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -56,19 +56,19 @@ final class Selkie extends AbstractActionController
 
 		return array(
 			'isAdmin' => $admin,
-			'batchs'  => $this->getTable()->getAll($where),
+			'rolls'  => $this->getTable()->getAll($where),
 		);
 	}
 
 	function addAction()
 	{
-		$form = new BatchForm(null, $this->_isAdmin());
+		$form = new RollForm(null, $this->_isAdmin());
 
 		$request = $this->getRequest();
 		if ($request->isPost())
 		{
-			$batch = new Batch;
-			$form->setInputFilter($batch->getInputFilter());
+			$roll = new Roll;
+			$form->setInputFilter($roll->getInputFilter());
 
 			$data = $request->getPost();
 			$data['creator'] = $this->_getIdentity();
@@ -89,8 +89,8 @@ final class Selkie extends AbstractActionController
 
 				// @todo Activates the vouchers if necessary.
 
-				$batch->exchangeArray($data);
-				$this->getTable()->save($batch, $data['number']);
+				$roll->exchangeArray($data);
+				$this->getTable()->save($roll, $data['number']);
 
 				return $this->redirect()->toRoute('selkie');
 			}
@@ -117,7 +117,7 @@ final class Selkie extends AbstractActionController
 			{
 				// @todo Why? Shouldn't it be in the URL?
 				$id = (int) $request->getPost('id');
-				$this->getTable()->deleteBatch($id);
+				$this->getTable()->deleteRoll($id);
 			}
 
 			return $this->redirect()->toRoute('selkie');
@@ -125,7 +125,7 @@ final class Selkie extends AbstractActionController
 
 		return array(
 			'id'      => $id,
-			'batch' => $this->getTable()->get($id)
+			'roll' => $this->getTable()->get($id)
 		);
 	}
 
@@ -137,13 +137,13 @@ final class Selkie extends AbstractActionController
 			return $this->redirect()->toRoute('selkie');
 		}
 
-		$batch  = $this->getTable()->get($id);
+		$roll  = $this->getTable()->get($id);
 		$jasper = $this->getServiceLocator()->get('Selkie\Jasper');
 
-		$pdf = $jasper->requestReport(get_object_vars($batch));
+		$pdf = $jasper->requestReport(get_object_vars($roll));
 
-		$batch->printed = true;
-		$this->getTable()->save($batch);
+		$roll->printed = true;
+		$this->getTable()->save($roll);
 
 		header('Content-Type: application/pdf');
 		echo $pdf;
@@ -171,7 +171,7 @@ final class Selkie extends AbstractActionController
 
 		return $this->redirect()->toRoute('selkie', array(
 			'action' => 'view',
-			'id'     => $voucher['batch_id'],
+			'id'     => $voucher['roll_id'],
 		));
 	}
 
@@ -183,13 +183,13 @@ final class Selkie extends AbstractActionController
 			return $this->redirect()->toRoute('selkie');
 		}
 
-		$batch = $this->getTable()->get($id);
+		$roll = $this->getTable()->get($id);
 		$vouchers = $this->getServiceLocator()
 			->get('Selkie\Model\VoucherGateway')
-			->select(array('batch_id' => $id));
+			->select(array('roll_id' => $id));
 
 		return array(
-			'batch'    => $batch,
+			'roll'    => $roll,
 			'vouchers' => $vouchers,
 		);
 	}
@@ -197,14 +197,14 @@ final class Selkie extends AbstractActionController
 	function cleanAction()
 	{
 		$where = function (Select $select) {
-			// SQL to get all past batches.
+			// SQL to get all past rolles.
 			$select->where('activation + CAST(duration || \' minutes\' AS INTERVAl) < NOW()');
 		};
 
-		$bg = $this->getServiceLocator()->get('Selkie\Model\BatchTable');
-		foreach ($bg->getAll($where) as $batch)
+		$bg = $this->getServiceLocator()->get('Selkie\Model\RollTable');
+		foreach ($bg->getAll($where) as $roll)
 		{
-			$bg->deleteBatch($batch);
+			$bg->deleteRoll($roll);
 		}
 
 		exit;
@@ -298,7 +298,7 @@ final class Selkie extends AbstractActionController
 	//--------------------------------------
 
 	/**
-	 * @return Selkie\Model\BatchTable
+	 * @return Selkie\Model\RollTable
 	 */
 	function getTable()
 	{
@@ -306,7 +306,7 @@ final class Selkie extends AbstractActionController
 		{
 			$this->_table = $this
 				->getServiceLocator()
-				->get('Selkie\Model\BatchTable')
+				->get('Selkie\Model\RollTable')
 				;
 		}
 		return $this->_table;
@@ -356,7 +356,7 @@ final class Selkie extends AbstractActionController
 	}
 
 	/**
-	 * @var Selkie\Model\BatchTable
+	 * @var Selkie\Model\RollTable
 	 */
 	protected $_table;
 

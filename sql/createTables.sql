@@ -20,30 +20,28 @@
 -- @package Selkie
 ----
 
--- A batch is a set of vouchers.
---
--- Batchs are named “rolls” in pfSense.
-CREATE TABLE "batch"
+-- A roll is a set of vouchers.
+CREATE TABLE "roll"
 (
     -- Unique identifier.
     "id" SERIAL,
 
-    -- Name of the user who created the batch.
+    -- Name of the user who created the roll.
     "creator" TEXT NOT NULL,
 
     -- Optional comment.
     "comment" TEXT NOT NULL DEFAULT '',
 
-    -- Validity duration for this batch in seconds.
+    -- Validity duration for this roll in seconds.
     "duration" INTEGER NOT NULL,
 
-    -- When the batch was created.
+    -- When the roll was created.
     "creation" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
 
-    -- When the batch was activated or NULL if it was not.
+    -- When the roll was activated or NULL if it was not.
     "activation" TIMESTAMP DEFAULT NULL,
 
-    -- Number of batchs generated.
+    -- As the roll already be printed.
     "printed" BOOLEAN NOT NULL DEFAULT FALSE,
 
     -- Identifier in pfSense.
@@ -54,12 +52,12 @@ CREATE TABLE "batch"
 
 CREATE TABLE "voucher"
 (
-    -- Batch identifier.
-    "batch_id" INTEGER NOT NULL,
+    -- Roll identifier.
+    "roll_id" INTEGER NOT NULL,
 
     -- Unique identifier.
     "id" TEXT NOT NULL,
 
     PRIMARY KEY ("id"),
-    FOREIGN KEY ("batch_id") REFERENCES "batch" ("id")
+    FOREIGN KEY ("roll_id") REFERENCES "roll" ("id")
 );

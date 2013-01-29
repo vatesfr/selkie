@@ -21,12 +21,12 @@
  * @package Selkie
  */
 
-$title = 'Batchs';
+$title = 'Rolls';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p>
-	<a href="<?php echo $this->url('selkie', array('action'=>'add'));?>">Add new batch</a>
+	<a href="<?php echo $this->url('selkie', array('action'=>'add'));?>">Add new roll</a>
 </p>
 
 <p>
@@ -44,19 +44,19 @@ $this->headTitle($title);
 	<th>Comment</th>
 	<th>&nbsp;</th>
 </tr>
-<?php foreach ($batchs as $batch): ?>
+<?php foreach ($rolls as $roll): ?>
 <tr>
-	<td><a href="<?php echo $this->url('selkie', array('action'=>'view', 'id' => $batch->id));?>"><?php echo $this->escapeHtml($batch->creator);?></a></td>
-	<td><?php echo $this->escapeHtml($batch->duration);?></td>
-	<td><?php echo $this->escapeHtml($batch->creation);?></td>
-	<td><?php echo $this->escapeHtml($batch->activation);?></td>
-	<td><?php echo $this->escapeHtml($batch->comment);?></td>
+	<td><a href="<?php echo $this->url('selkie', array('action'=>'view', 'id' => $roll->id));?>"><?php echo $this->escapeHtml($roll->creator);?></a></td>
+	<td><?php echo $this->escapeHtml($roll->duration);?> minutes</td>
+	<td><?php echo $this->escapeHtml($roll->creation);?></td>
+	<td><?php echo $this->escapeHtml($roll->activation);?></td>
+	<td><?php echo $this->escapeHtml($roll->comment);?></td>
 	<td>
 		<a href="<?php echo $this->url('selkie',
-			array('action'=>'print', 'id' => $batch->id));?>">Print</a>
+			array('action'=>'print', 'id' => $roll->id));?>">Print</a>
 		<?php if ($this->isAdmin) { ?>
 		<a href="<?php echo $this->url('selkie',
-			array('action'=>'delete', 'id' => $batch->id));?>">Delete</a>
+			array('action'=>'delete', 'id' => $roll->id));?>">Delete</a>
 		<?php } ?>
 	</td>
 </tr>

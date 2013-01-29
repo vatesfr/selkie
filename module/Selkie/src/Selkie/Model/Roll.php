@@ -28,7 +28,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-final class Batch
+final class Roll
 {
 	/**
 	 * @var integer

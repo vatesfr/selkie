@@ -25,8 +25,8 @@ namespace Selkie;
 
 use Selkie\pfSense;
 use Selkie\Jasper;
-use Selkie\Model\Batch;
-use Selkie\Model\BatchTable;
+use Selkie\Model\Roll;
+use Selkie\Model\RollTable;
 
 use Zend\Authentication\Adapter\Ldap as LdapAuth;
 use Zend\Authentication\AuthenticationService;
@@ -67,9 +67,9 @@ final class Module
 	{
 		return array(
 			'factories' => array(
-				'Selkie\Model\BatchTable' =>  function($sm) {
-					return new BatchTable(
-						$sm->get('Selkie\Model\BatchGateway'),
+				'Selkie\Model\RollTable' =>  function($sm) {
+					return new RollTable(
+						$sm->get('Selkie\Model\RollGateway'),
 						$sm->get('Selkie\Model\VoucherGateway'),
 						$sm->get('Selkie\pfSense')
 					);
@@ -80,12 +80,12 @@ final class Module
 						$sm->get('Zend\Db\Adapter\Adapter')
 					);
 				},
-				'Selkie\Model\BatchGateway' => function ($sm) {
+				'Selkie\Model\RollGateway' => function ($sm) {
 					$proto = new ResultSet;
-					$proto->setArrayObjectPrototype(new Batch);
+					$proto->setArrayObjectPrototype(new Roll);
 
 					return new TableGateway(
-						'batch',
+						'roll',
 						$sm->get('Zend\Db\Adapter\Adapter'),
 						null,
 						$proto

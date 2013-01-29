@@ -21,30 +21,30 @@
  * @package Selkie
  */
 
-$title = 'View batch '.$this->batch->pfs_id;
+$title = 'View roll '.$this->roll->pfs_id;
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <table class="table">
 <tr>
 	<th>Creator</th>
-	<td><?php echo $this->escapeHtml($batch->creator);?></td>
+	<td><?php echo $this->escapeHtml($roll->creator);?></td>
 </tr>
 <tr>
 	<th>Duration</th>
-	<td><?php echo $this->escapeHtml($batch->duration);?></td>
+	<td><?php echo $this->escapeHtml($roll->duration);?> minutes</td>
 </tr>
 <tr>
 	<th>Creation</th>
-	<td><?php echo $this->escapeHtml($batch->creation);?></td>
+	<td><?php echo $this->escapeHtml($roll->creation);?></td>
 </tr>
 <tr>
 	<th>Activation</th>
-	<td><?php echo $this->escapeHtml($batch->activation);?></td>
+	<td><?php echo $this->escapeHtml($roll->activation);?></td>
 </tr>
 <tr>
 	<th>Comment</th>
-	<td><?php echo $this->escapeHtml($batch->comment);?></td>
+	<td><?php echo $this->escapeHtml($roll->comment);?></td>
 </tr>
 <tr>
 	<th>Voucher(s)</th>

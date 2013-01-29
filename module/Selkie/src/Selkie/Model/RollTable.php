@@ -27,32 +27,32 @@ use Selkie\pfSense;
 
 use Zend\Db\TableGateway\TableGateway;
 
-final class BatchTable
+final class RollTable
 {
-	protected $_tblBatch;
+	protected $_tblRoll;
 	protected $_tblVoucher;
 	protected $_pfSense;
 
 	function __construct(
-		TableGateway $tblBatch,
+		TableGateway $tblRoll,
 		TableGateway $tblVoucher,
 		pfSense $pfSense
 	)
 	{
-		$this->_tblBatch   = $tblBatch;
+		$this->_tblRoll   = $tblRoll;
 		$this->_tblVoucher = $tblVoucher;
 		$this->_pfSense    = $pfSense;
 	}
 
 	function getAll($where = null)
 	{
-		return $this->_tblBatch->select($where);
+		return $this->_tblRoll->select($where);
 	}
 
 	function get($id)
 	{
 		$id     = (int) $id;
-		$rowset = $this->_tblBatch->select(array('id' => $id));
+		$rowset = $this->_tblRoll->select(array('id' => $id));
 		$row    = $rowset->current();
 		if (!$row)
 		{
@@ -61,19 +61,19 @@ final class BatchTable
 		return $row;
 	}
 
-	function save(Batch $batch, $number = 1)
+	function save(Roll $roll, $number = 1)
 	{
 		$data = array();
-		foreach (array_keys(get_object_vars($batch)) as $field)
+		foreach (array_keys(get_object_vars($roll)) as $field)
 		{
 			if (('id' !== $field)
-			    && isset($batch->$field))
+			    && isset($roll->$field))
 			{
-				$data[$field] = $batch->$field;
+				$data[$field] = $roll->$field;
 			}
 		}
 
-		$id = (int) $batch->id;
+		$id = (int) $roll->id;
 		if ($id === 0)
 		{
 			$tries = 10;
@@ -89,19 +89,19 @@ final class BatchTable
 			} while (!$roll && --$tries);
 			if (!$tries)
 			{
-				throw new \Exception('failed to create the batch');
+				throw new \Exception('failed to create the roll');
 			}
 
 			$data['pfs_id'] = $pfs_id;
-			$this->_tblBatch->insert($data);
+			$this->_tblRoll->insert($data);
 
 			// @todo Bug in Zend Framework 2.
-			$id = $this->_tblBatch->getAdapter()->getDriver()->getConnection()->getLastGeneratedValue('batch_id_seq');
+			$id = $this->_tblRoll->getAdapter()->getDriver()->getConnection()->getLastGeneratedValue('roll_id_seq');
 
 			foreach ($roll['vouchers'] as $voucher)
 			{
 				$this->_tblVoucher->insert(array(
-					'batch_id' => $id,
+					'roll_id' => $id,
 					'id'       => $voucher,
 				));
 			}
@@ -110,7 +110,7 @@ final class BatchTable
 		{
 			if ($this->get($id))
 			{
-				$this->_tblBatch->update($data, array('id' => $id));
+				$this->_tblRoll->update($data, array('id' => $id));
 			}
 			else
 			{
@@ -119,16 +119,16 @@ final class BatchTable
 		}
 	}
 
-	function deleteBatch($batch)
+	function deleteRoll($roll)
 	{
-		if (is_numeric($batch))
+		if (is_numeric($roll))
 		{
-			$batch = $this->get($id);
+			$roll = $this->get($id);
 		}
 
-		$this->_tblVoucher->delete(array('batch_id' => $batch->id));
-		$this->_tblBatch->delete(array('id' => $batch->id));
+		$this->_tblVoucher->delete(array('roll_id' => $roll->id));
+		$this->_tblRoll->delete(array('id' => $roll->id));
 
-		$this->_pfSense->deleteRoll($batch->pfs_id);
+		$this->_pfSense->deleteRoll($roll->pfs_id);
 	}
 }

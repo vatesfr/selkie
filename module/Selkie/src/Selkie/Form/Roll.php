@@ -28,7 +28,7 @@ use Zend\Form\Form;
 /**
  *
  */
-final class Batch extends Form
+final class Roll extends Form
 {
 	function __construct($name = null, $admin = null)
 	{
