@@ -12,5 +12,33 @@
  */
 
 return array(
-    // ...
+	'db' => array(
+		//'dsn'      => 'pgsql:host=localhost;dbname=selkie',
+		//'username' => '',
+		//'password' => '',
+	),
+
+	'ldap' => array(
+		'host'              => 'ldap.example.net',
+		'baseDn'            => 'ou=people,dc=example,dc=net',
+		'accountDomainName' => 'example.net',
+
+		'groupDn'    => 'ou=group,dc=example,dc=net',
+		//'adminGroup' => '',
+		//'userGroup'  => '',
+	),
+
+	'pfsense' => array(
+		'url' => 'https://pfsense.example.net/cp.php',
+		'key' => 'password',
+	),
+
+	'jasper' => array(
+		'url'      => 'http://jasper.example.net',
+		'username' => 'user',
+		'password' => 'password',
+
+		'format'   => '', // @todo
+		'report'   => '', // @todo
+	),
 );

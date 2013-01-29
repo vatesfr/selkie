@@ -131,8 +131,8 @@ final class Selkie extends AbstractActionController
 
 	function printAction()
 	{
-		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id)
+		$id = $this->params()->fromRoute('id');
+		if (null === $id)
 		{
 			return $this->redirect()->toRoute('selkie');
 		}
@@ -148,6 +148,50 @@ final class Selkie extends AbstractActionController
 		header('Content-Type: application/pdf');
 		echo $pdf;
 		exit;
+	}
+
+	function searchAction()
+	{
+		$id = $this->getRequest()->getPost('id');
+
+		if (!$id)
+		{
+			return $this->redirect()->toRoute('selkie');
+		}
+
+		$voucher = $this->getServiceLocator()
+			->get('Selkie\Model\VoucherGateway')
+			->select(array('id' => $id))
+			->current();
+
+		if (!$voucher)
+		{
+			return $this->redirect()->toRoute('selkie');
+		}
+
+		return $this->redirect()->toRoute('selkie', array(
+			'action' => 'view',
+			'id'     => $voucher['batch_id'],
+		));
+	}
+
+	function viewAction()
+	{
+		$id = $this->params()->fromRoute('id');
+		if (null === $id)
+		{
+			return $this->redirect()->toRoute('selkie');
+		}
+
+		$batch = $this->getTable()->get($id);
+		$vouchers = $this->getServiceLocator()
+			->get('Selkie\Model\VoucherGateway')
+			->select(array('batch_id' => $id));
+
+		return array(
+			'batch'    => $batch,
+			'vouchers' => $vouchers,
+		);
 	}
 
 	function cleanAction()

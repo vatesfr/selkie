@@ -21,44 +21,37 @@
  * @package Selkie
  */
 
-$title = 'Batchs';
+$title = 'View batch '.$this->batch->pfs_id;
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<p>
-	<a href="<?php echo $this->url('selkie', array('action'=>'add'));?>">Add new batch</a>
-</p>
-
-<p>
-<form class="form" action="<?php echo $this->url('selkie', array('action' => 'search')); ?>" method="post">
-<input name="id" type="text" value=""> <input type="submit" value="View voucher">
-</form>
-</p>
-
 <table class="table">
 <tr>
 	<th>Creator</th>
-	<th>Duration</th>
-	<th>Creation</th>
-	<th>Activation</th>
-	<th>Comment</th>
-	<th>&nbsp;</th>
+	<td><?php echo $this->escapeHtml($batch->creator);?></td>
 </tr>
-<?php foreach ($batchs as $batch): ?>
 <tr>
-	<td><a href="<?php echo $this->url('selkie', array('action'=>'view', 'id' => $batch->id));?>"><?php echo $this->escapeHtml($batch->creator);?></a></td>
+	<th>Duration</th>
 	<td><?php echo $this->escapeHtml($batch->duration);?></td>
+</tr>
+<tr>
+	<th>Creation</th>
 	<td><?php echo $this->escapeHtml($batch->creation);?></td>
+</tr>
+<tr>
+	<th>Activation</th>
 	<td><?php echo $this->escapeHtml($batch->activation);?></td>
+</tr>
+<tr>
+	<th>Comment</th>
 	<td><?php echo $this->escapeHtml($batch->comment);?></td>
+</tr>
+<tr>
+	<th>Voucher(s)</th>
 	<td>
-		<a href="<?php echo $this->url('selkie',
-			array('action'=>'print', 'id' => $batch->id));?>">Print</a>
-		<?php if ($this->isAdmin) { ?>
-		<a href="<?php echo $this->url('selkie',
-			array('action'=>'delete', 'id' => $batch->id));?>">Delete</a>
-		<?php } ?>
+		<?php foreach ($vouchers as $voucher): ?>
+		<div><?php echo $this->escapeHtml($voucher->id); ?></div>
+		<?php endforeach; ?>
 	</td>
 </tr>
-<?php endforeach; ?>
 </table>

@@ -12,40 +12,43 @@
  */
 
 return array(
-	'db' => array(
-		'driver'         => 'Pdo',
-		'dsn'            => 'pgsql:host=localhost;dbname=selkie',
-		'driver_options' => array(
-			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
-		),
-	),
 	'service_manager' => array(
 		'factories' => array(
 			'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
 		),
 	),
 
-	'ldap' => array(
-		'host'   => 'ldap.vates.fr',
-		'useSsl' => true,
-		'bindRequiresDn' => true,
-		'baseDn' => 'ou=people,dc=vates,dc=fr',
-		'accountDomainName' => 'vates.fr',
+	'db' => array(
+		'driver'         => 'Pdo',
+		'dsn'            => 'pgsql:host=localhost;dbname=selkie',
+		'driver_options' => array(
+			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+		),
+		'username'       => 'selkie',
+		'password'       => 'selkie',
+	),
 
-		'groupDn' => 'ou=group,dc=vates,dc=fr',
-		'adminGroup' => 'direction',
-		'userGroup'  => 'Services',
+	'ldap' => array(
+		'host'              => '',
+		'useSsl'            => true,
+		'bindRequiresDn'    => true,
+		'baseDn'            => '',
+		'accountDomainName' => '',
+
+		'groupDn'    => '',
+		'adminGroup' => 'selkie-admin',
+		'userGroup'  => 'selkie-user',
 	),
 
 	'pfsense' => array(
-		'url' => 'https://192.168.1.10/cp.php',
-		'key' => 'directeur+oriflamme',
+		'url' => 'https://pfsense.example.net/cp.php',
+		'key' => 'password',
 	),
 
 	'jasper' => array(
-		'url'      => '', // @todo
-		'username' => '', // @todo
-		'password' => '', // @todo
+		'url'      => 'http://jasper.example.net',
+		'username' => 'user',
+		'password' => 'password',
 
 		'format'   => '', // @todo
 		'report'   => '', // @todo
