@@ -3,12 +3,12 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle($this->translate('Selkie'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
         <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
+        <?php echo $this->headLink()
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
@@ -28,11 +28,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Selkie') ?></a>
                     <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+                        <?php if ($this->viewModel()->getCurrent()->getChildren()[0]->currentUser) { ?>
+                        <ul class="nav pull-right">
+                            <li><a href="<?php echo $this->url('selkie', array('action' => 'logOut')) ?>"><?php echo $this->translate('Log out') ?></a></li>
                         </ul>
+                        <?php } ?>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
@@ -41,7 +43,7 @@
             <?php echo $this->content; ?>
             <hr>
             <footer>
-                <p>&copy; 2005 - 2012 by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+                <p>&copy; 2013 Vates SAS. &lt;<a href="https://vates.fr/">https://vates.fr/</a>&gt; − Distributed under the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">GPL 3.0</a>.</p>
             </footer>
         </div> <!-- /container -->
         <?php echo $this->inlineScript() ?>
