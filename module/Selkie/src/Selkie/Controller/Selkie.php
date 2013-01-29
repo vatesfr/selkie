@@ -111,8 +111,8 @@ final class Selkie extends AbstractActionController
 
 	function deleteAction()
 	{
-		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id
+		$id = $this->params()->fromRoute('id');
+		if ((null === $id)
 		    || !$this->_isAdmin())
 		{
 			return $this->redirect()->toRoute('selkie');

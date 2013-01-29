@@ -80,7 +80,12 @@ final class BatchTable
 			do
 			{
 				$pfs_id = mt_rand(0, 65535);
-				$roll = $this->_pfSense->createRoll($pfs_id, $data['duration'], $number, $data['comment']);
+				$roll = $this->_pfSense->createRoll(
+					$pfs_id,
+					$number,
+					$data['duration'],
+					$data['comment']
+				);
 			} while (!$roll && --$tries);
 			if (!$tries)
 			{
@@ -116,7 +121,11 @@ final class BatchTable
 
 	function deleteBatch($id)
 	{
+		$batch = $this->get($id);
+
 		$this->_tblVoucher->delete(array('batch_id' => $id));
 		$this->_tblBatch->delete(array('id' => $id));
+
+		$this->_pfSense->deleteRoll($batch->pfs_id);
 	}
 }
