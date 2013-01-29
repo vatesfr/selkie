@@ -23,15 +23,19 @@
 
 namespace Selkie\Model;
 
+user Selkie\pfSense;
+
 use Zend\Db\TableGateway\TableGateway;
 
 final class BatchTable
 {
 	protected $tableGateway;
+	protected $pfSense;
 
-	function __construct(TableGateway $tableGateway)
+	function __construct(TableGateway $tableGateway, pfSense $pfSense)
 	{
 		$this->tableGateway = $tableGateway;
+		$this->pfSense      = $pfSense;
 	}
 
 	function getAll($where = null)
@@ -74,6 +78,8 @@ final class BatchTable
 		$id = (int) $batch->id;
 		if ($id === 0)
 		{
+			$this->pfSense->createRoll(rand());
+
 			$this->tableGateway->insert($data);
 		}
 		else

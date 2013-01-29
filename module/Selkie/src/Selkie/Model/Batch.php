@@ -61,6 +61,11 @@ final class Batch
 	public $activation;
 
 	/**
+	 * @var boolean
+	 */
+	public $printed;
+
+	/**
 	 *
 	 */
 	function exchangeArray(array $data)

@@ -23,6 +23,8 @@
 
 namespace Selkie;
 
+use Selkie\pfSense;
+use Selkie\Jasper;
 use Selkie\Model\Batch;
 use Selkie\Model\BatchTable;
 
@@ -67,7 +69,8 @@ final class Module
 			'factories' => array(
 				'Selkie\Model\BatchTable' =>  function($sm) {
 					return new BatchTable(
-						$sm->get('Selkie\Model\BatchGateway')
+						$sm->get('Selkie\Model\BatchGateway'),
+						$sm->get('Selkie\pfSense')
 					);
 				},
 				'Selkie\Model\BatchGateway' => function ($sm) {
@@ -91,7 +94,23 @@ final class Module
 				},
 				'SelkieSession' => function ($sm) {
 					return new \Zend\Session\Container('selkie');
-				}
+				},
+				'Selkie\pfSense' => function ($sm) {
+					$conf = $sm->get('Config')['pfsense'];
+
+					return new pfSense($conf['url'], $conf['key']);
+				},
+				'Selkie\Jasper' => function ($sm) {
+					$conf = $sm->get('Config')['jasper'];
+
+					return new Jasper(
+						$conf['url'],
+						$conf['username'],
+						$conf['password'],
+						$conf['format'],
+						$conf['report']
+					);
+				},
 			),
 		);
 	}

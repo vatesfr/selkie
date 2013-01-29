@@ -34,10 +34,21 @@ use Zend\View\Model\ViewModel;
 
 /**
  * @todo Handle entering a voucher id.
- * @todo Handle printing a voucher through Jasper.
+ * @todo Handle clean up.
+ *
+ * @todo Test: Handle printing a voucher through Jasper.
  */
 final class Selkie extends AbstractActionController
 {
+	// @todo remove
+	function testAction()
+	{
+		$pf = $this->getServiceLocator()->get('Selkie\pfSense');
+
+		header('Content-Type: text/plain');
+		var_export($pf->createRoll(0, 10, 30));
+	}
+
 	function indexAction()
 	{
 		$admin    = $this->_isAdmin();
@@ -53,7 +64,8 @@ final class Selkie extends AbstractActionController
 		};
 
 		return array(
-			'batchs' => $this->getTable()->getAll($where),
+			'isAdmin' => $admin,
+			'batchs'  => $this->getTable()->getAll($where),
 		);
 	}
 
@@ -100,7 +112,8 @@ final class Selkie extends AbstractActionController
 	function deleteAction()
 	{
 		$id = (int) $this->params()->fromRoute('id', 0);
-		if (!$id)
+		if (!$id
+		    || !$this->_isAdmin())
 		{
 			return $this->redirect()->toRoute('selkie');
 		}
@@ -124,6 +137,27 @@ final class Selkie extends AbstractActionController
 			'id'      => $id,
 			'batch' => $this->getTable()->get($id)
 		);
+	}
+
+	function printAction()
+	{
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if (!$id)
+		{
+			return $this->redirect()->toRoute('selkie');
+		}
+
+		$batch  = $this->getTable()->get($id);
+		$jasper = $this->getServiceLocator()->get('Selkie\Jasper');
+
+		$pdf = $jasper->requestReport(get_object_vars($batch));
+
+		$batch->printed = true;
+		$this->getTable()->save($batch);
+
+		header('Content-Type: application/pdf');
+		echo $pdf;
+		exit;
 	}
 
 	function loginAction()

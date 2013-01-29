@@ -38,8 +38,16 @@ return array(
 	),
 
 	'pfsense' => array(
-		'host' => 'localhost',
-		'username' => 'admin',
-		'password' => 'admin',
+		'url' => 'https://192.168.1.10/cp.php',
+		'key' => 'admin',
+	),
+
+	'jasper' => array(
+		'url'      => '', // @todo
+		'username' => '', // @todo
+		'password' => '', // @todo
+
+		'format'   => '', // @todo
+		'report'   => '', // @todo
 	),
 );

@@ -47,7 +47,11 @@ $this->headTitle($title);
 	<td><?php echo $this->escapeHtml($batch->comment);?></td>
 	<td>
 		<a href="<?php echo $this->url('selkie',
+			array('action'=>'print', 'id' => $batch->id));?>">Print</a>
+		<?php if ($this->isAdmin) { ?>
+		<a href="<?php echo $this->url('selkie',
 			array('action'=>'delete', 'id' => $batch->id));?>">Delete</a>
+		<?php } ?>
 	</td>
 </tr>
 <?php endforeach; ?>
