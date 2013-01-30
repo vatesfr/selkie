@@ -25,7 +25,15 @@ $title = 'View roll '.$this->roll->pfs_id;
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<table class="table">
+<p class="pull-right">
+		<a href="<?php echo $this->url('selkie',
+			array('action'=>'print', 'id' => $roll->id));?>">Print</a>
+		<?php if ($this->isAdmin) { ?>
+		| <a href="<?php echo $this->url('selkie',
+			array('action'=>'delete', 'id' => $roll->id));?>">Delete</a>
+		<?php } ?>
+</p>
+<table class="table table-striped">
 <tr>
 	<th>Creator</th>
 	<td><?php echo $this->escapeHtml($roll->creator);?></td>
@@ -40,11 +48,11 @@ $this->headTitle($title);
 </tr>
 <tr>
 	<th>Activation</th>
-	<td><?php echo $this->escapeHtml($roll->activation);?></td>
+	<td><?php echo ($roll->activation === null ? '<em>not activated</em>' : $this->escapeHtml($roll->activation));?></td>
 </tr>
 <tr>
 	<th>Comment</th>
-	<td><?php echo $this->escapeHtml($roll->comment);?></td>
+	<td><?php echo ($this->escapeHtml($roll->comment) ?: '<em>none</em>');?></td>
 </tr>
 <tr>
 	<th>Voucher(s)</th>

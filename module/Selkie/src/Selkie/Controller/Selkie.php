@@ -189,7 +189,8 @@ final class Selkie extends AbstractActionController
 			->select(array('roll_id' => $id));
 
 		return array(
-			'roll'    => $roll,
+			'isAdmin'  => $this->_isAdmin(),
+			'roll'     => $roll,
 			'vouchers' => $vouchers,
 		);
 	}

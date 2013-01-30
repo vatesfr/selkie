@@ -35,7 +35,7 @@ $this->headTitle($title);
 </form>
 </p>
 
-<table class="table">
+<table class="table table-condensed table-bordered table-striped">
 <tr>
 	<th>Creator</th>
 	<th>Duration</th>
@@ -49,8 +49,8 @@ $this->headTitle($title);
 	<td><a href="<?php echo $this->url('selkie', array('action'=>'view', 'id' => $roll->id));?>"><?php echo $this->escapeHtml($roll->creator);?></a></td>
 	<td><?php echo $this->escapeHtml($roll->duration);?> minutes</td>
 	<td><?php echo $this->escapeHtml($roll->creation);?></td>
-	<td><?php echo $this->escapeHtml($roll->activation);?></td>
-	<td><?php echo $this->escapeHtml($roll->comment);?></td>
+	<td><?php echo ($roll->activation === null ? '<em>not activated</em>' : $this->escapeHtml($roll->activation));?></td>
+	<td><?php echo ($this->escapeHtml($roll->comment) ?: '<em>none</em>');?></td>
 	<td>
 		<a href="<?php echo $this->url('selkie',
 			array('action'=>'print', 'id' => $roll->id));?>">Print</a>
