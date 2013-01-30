@@ -51,7 +51,7 @@ final class Selkie extends AbstractActionController
 					'creator' => $identity,
 				));
 			}
-			$select->limit(100);
+			$select->limit(100)->order('creation');
 		};
 
 		return array(

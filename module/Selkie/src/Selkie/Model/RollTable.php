@@ -123,7 +123,7 @@ final class RollTable
 	{
 		if (is_numeric($roll))
 		{
-			$roll = $this->get($id);
+			$roll = $this->get($roll);
 		}
 
 		$this->_tblVoucher->delete(array('roll_id' => $roll->id));

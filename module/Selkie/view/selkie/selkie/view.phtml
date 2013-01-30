@@ -27,7 +27,7 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p class="pull-right">
 		<a href="<?php echo $this->url('selkie',
-			array('action'=>'print', 'id' => $roll->id));?>">Print</a>
+			array('action'=>'print', 'id' => $roll->id));?>"<?php if ($roll->printed) {?> class="muted"<?php }?>>Print</a>
 		<?php if ($this->isAdmin) { ?>
 		| <a href="<?php echo $this->url('selkie',
 			array('action'=>'delete', 'id' => $roll->id));?>">Delete</a>
