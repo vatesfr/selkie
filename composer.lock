@@ -1,25 +1,24 @@
 {
-    "hash": "e45f066cbbee1e4dd7a883418a4468f9",
+    "hash": "f71a3ac14e3a8f8ad14fa9f91428d3f7",
     "packages": [
         {
             "name": "zendframework/zendframework",
-            "version": "2.0.6",
+            "version": "2.0.7",
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "release-2.0.6"
+                "reference": "release-2.0.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/release-2.0.6.zip",
-                "reference": "release-2.0.6",
+                "url": "https://github.com/zendframework/zf2/archive/release-2.0.7.zip",
+                "reference": "release-2.0.7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "replace": {
-                "zendframework/zend-acl": "self.version",
                 "zendframework/zend-authentication": "self.version",
                 "zendframework/zend-barcode": "self.version",
                 "zendframework/zend-cache": "self.version",
@@ -29,6 +28,7 @@
                 "zendframework/zend-console": "self.version",
                 "zendframework/zend-crypt": "self.version",
                 "zendframework/zend-db": "self.version",
+                "zendframework/zend-debug": "self.version",
                 "zendframework/zend-di": "self.version",
                 "zendframework/zend-dom": "self.version",
                 "zendframework/zend-escaper": "self.version",
@@ -45,7 +45,6 @@
                 "zendframework/zend-loader": "self.version",
                 "zendframework/zend-log": "self.version",
                 "zendframework/zend-mail": "self.version",
-                "zendframework/zend-markup": "self.version",
                 "zendframework/zend-math": "self.version",
                 "zendframework/zend-memory": "self.version",
                 "zendframework/zend-mime": "self.version",
@@ -53,6 +52,7 @@
                 "zendframework/zend-mvc": "self.version",
                 "zendframework/zend-navigation": "self.version",
                 "zendframework/zend-paginator": "self.version",
+                "zendframework/zend-permissions-acl": "self.version",
                 "zendframework/zend-progressbar": "self.version",
                 "zendframework/zend-serializer": "self.version",
                 "zendframework/zend-server": "self.version",
@@ -64,6 +64,7 @@
                 "zendframework/zend-text": "self.version",
                 "zendframework/zend-uri": "self.version",
                 "zendframework/zend-validator": "self.version",
+                "zendframework/zend-version": "self.version",
                 "zendframework/zend-view": "self.version",
                 "zendframework/zend-xmlrpc": "self.version"
             },
@@ -78,7 +79,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "2012-12-19 21:14:25",
+            "time": "2013-01-29 22:23:49",
             "bin": [
                 "bin/classmap_generator.php"
             ],
