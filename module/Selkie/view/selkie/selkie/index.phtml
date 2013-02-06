@@ -56,7 +56,7 @@ $this->headTitle($title);
 	<td>
 		<?php if ($this->isAdmin) { ?>
 		<a href="<?php echo $this->url('selkie',
-			array('action'=>'delete', 'id' => $roll->id));?>">Delete</a>
+			array('action'=>'delete', 'id' => $roll->id));?>"><i class="icon-remove"></i> Delete</a>
 		<?php } else { ?>&nbsp;<?php } ?>
 	</td>
 </tr>

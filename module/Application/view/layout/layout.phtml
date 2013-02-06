@@ -9,9 +9,11 @@
 
         <!-- Le styles -->
         <?php echo $this->headLink()
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+                        ->appendStylesheet($this->basePath() . '/css/font-awesome.min.css')
+                        ->appendStylesheet($this->basePath() . '/css/font-awesome-ie7.min.css', 'screen', 'IE 7')
+                        ->appendStylesheet($this->basePath() . '/css/style.css') ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))

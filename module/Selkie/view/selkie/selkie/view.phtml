@@ -27,13 +27,13 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p class="pull-left">
 	<a href="<?php echo $this->url('selkie'); ?>">
-		← Vouchers
+		<i class="icon-arrow-left"></i> Vouchers
 	</a>
 </p>
 <?php if ($this->isAdmin) { ?>
 <p class="pull-right">
 	<a href="<?php echo $this->url('selkie', array('action'=>'delete', 'id' => $roll->id));?>">
-		❌ Delete
+		<i class="icon-remove"></i> Delete
 	</a>
 </p>
 <?php } ?>
@@ -67,7 +67,7 @@ $this->headTitle($title);
 	<td>
 		<?php foreach ($vouchers as $voucher): ?>
 		<div>
-			<a href="<?php echo $this->url('selkie', array('action'=>'print', 'id' => $voucher->id));?>"<?php if ($voucher['printed']) {?> class="muted"<?php }?> title="Print this voucher.">⎙ <?php echo $this->escapeHtml($voucher->id); ?></a>
+			<a href="<?php echo $this->url('selkie', array('action'=>'print', 'id' => $voucher->id));?>"<?php if ($voucher['printed']) {?> class="muted"<?php }?> title="Print this voucher."><i class="icon-print"></i> <?php echo $this->escapeHtml($voucher->id); ?></a>
 		</div>
 		<?php endforeach; ?>
 	</td>
