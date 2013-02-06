@@ -21,13 +21,13 @@
  * @package Selkie
  */
 
-$title = 'Add new roll';
+$title = 'Create new roll';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title);?></h1>
 <?php
 $form = $this->form;
-$form->setAttribute('action', $this->url('selkie', array('action' => 'add')));
+$form->setAttribute('action', $this->url('selkie', array('action' => 'create')));
 $form->prepare();
 
 echo

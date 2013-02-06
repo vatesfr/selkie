@@ -60,7 +60,7 @@ final class Selkie extends AbstractActionController
 		);
 	}
 
-	function addAction()
+	function createAction()
 	{
 		$form = new RollForm(null, $this->_isAdmin());
 
