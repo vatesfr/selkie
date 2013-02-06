@@ -37,6 +37,7 @@ $this->headTitle($title);
 
 <table class="table table-condensed table-bordered table-striped">
 <tr>
+	<th>Identifier</th>
 	<th>Creator</th>
 	<th>Duration</th>
 	<th>Creation</th>
@@ -46,7 +47,8 @@ $this->headTitle($title);
 </tr>
 <?php foreach ($rolls as $roll): ?>
 <tr>
-	<td><a href="<?php echo $this->url('selkie', array('action'=>'view', 'id' => $roll->id));?>"><?php echo $this->escapeHtml($roll->creator);?></a></td>
+	<td><a href="<?php echo $this->url('selkie', array('action'=>'view', 'id' => $roll->id));?>"><?php echo $this->escapeHtml($roll->pfs_id);?></a></td>
+	<td><?php echo $this->escapeHtml($roll->creator);?></td>
 	<td><?php echo $this->escapeHtml($roll->duration);?> minutes</td>
 	<td><?php echo $this->escapeHtml($roll->creation);?></td>
 	<td><?php echo ($roll->activation === null ? '<em>not activated</em>' : $this->escapeHtml($roll->activation));?></td>

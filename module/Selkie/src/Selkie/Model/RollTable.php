@@ -73,20 +73,19 @@ final class RollTable
 			}
 		}
 
-		$id = (int) $roll->id;
-		if ($id === 0)
+		if (!$roll->id)
 		{
 			$tries = 10;
 			do
 			{
 				$pfs_id = mt_rand(0, 65535);
-				$roll = $this->_pfSense->createRoll(
+				$record = $this->_pfSense->createRoll(
 					$pfs_id,
 					$number,
 					$data['duration'],
 					$data['comment']
 				);
-			} while (!$roll && --$tries);
+			} while (!$record && --$tries);
 			if (!$tries)
 			{
 				throw new \Exception('failed to create the roll');
@@ -96,21 +95,21 @@ final class RollTable
 			$this->_tblRoll->insert($data);
 
 			// @todo Bug in Zend Framework 2.
-			$id = $this->_tblRoll->getAdapter()->getDriver()->getConnection()->getLastGeneratedValue('roll_id_seq');
+			$roll->id = $this->_tblRoll->getAdapter()->getDriver()->getConnection()->getLastGeneratedValue('roll_id_seq');
 
-			foreach ($roll['vouchers'] as $voucher)
+			foreach ($record['vouchers'] as $voucher)
 			{
 				$this->_tblVoucher->insert(array(
-					'roll_id' => $id,
-					'id'       => $voucher,
+					'roll_id' => $roll->id,
+					'id'      => $voucher,
 				));
 			}
 		}
 		else
 		{
-			if ($this->get($id))
+			if ($this->get($roll->id))
 			{
-				$this->_tblRoll->update($data, array('id' => $id));
+				$this->_tblRoll->update($data, array('id' => $roll->id));
 			}
 			else
 			{

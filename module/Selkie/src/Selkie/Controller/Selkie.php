@@ -92,7 +92,10 @@ final class Selkie extends AbstractActionController
 				$roll->exchangeArray($data);
 				$this->_('Selkie\Model\RollTable')->save($roll, $data['number']);
 
-				return $this->redirect()->toRoute('selkie');
+				return $this->redirect()->toRoute('selkie', array(
+					'action' => 'view',
+					'id'     => $roll->id
+				));
 			}
 		}
 
