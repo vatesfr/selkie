@@ -75,6 +75,32 @@ final class pfSense
 	}
 
 	/**
+	 * @param string $id
+	 *
+	 * @return integer The number of minutes left for this voucher.
+	 */
+	function getVoucherTtl($id)
+	{
+		return $this->_request(
+			'GET',
+			$this->_url.'/voucher/'.$id.'/?test'
+		);
+	}
+
+	/**
+	 * @param string $id
+	 *
+	 * @return integer The number of minutes left for this voucher.
+	 */
+	function useVoucher($id)
+	{
+		return $this->_request(
+			'GET',
+			$this->_url.'/voucher/'.$id
+		);
+	}
+
+	/**
 	 *
 	 */
 	function deleteRoll($id)

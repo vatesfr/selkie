@@ -61,11 +61,6 @@ final class Roll
 	public $activation;
 
 	/**
-	 * @var boolean
-	 */
-	public $printed;
-
-	/**
 	 * @var integer
 	 */
 	public $pfs_id;

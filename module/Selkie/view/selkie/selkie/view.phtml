@@ -25,14 +25,13 @@ $title = 'View roll '.$this->roll->pfs_id;
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php if ($this->isAdmin) { ?>
 <p class="pull-right">
-		<a href="<?php echo $this->url('selkie',
-			array('action'=>'print', 'id' => $roll->id));?>"<?php if ($roll->printed) {?> class="muted"<?php }?>>Print</a>
-		<?php if ($this->isAdmin) { ?>
-		| <a href="<?php echo $this->url('selkie',
-			array('action'=>'delete', 'id' => $roll->id));?>">Delete</a>
-		<?php } ?>
+	<a href="<?php echo $this->url('selkie', array('action'=>'delete', 'id' => $roll->id));?>">
+		Delete
+	</a>
 </p>
+<?php } ?>
 <table class="table table-striped">
 <tr>
 	<th>Creator</th>
@@ -58,7 +57,9 @@ $this->headTitle($title);
 	<th>Voucher(s)</th>
 	<td>
 		<?php foreach ($vouchers as $voucher): ?>
-		<div><?php echo $this->escapeHtml($voucher->id); ?></div>
+		<div>
+			<a href="<?php echo $this->url('selkie', array('action'=>'print', 'id' => $voucher->id));?>"<?php if ($voucher['printed']) {?> class="muted"<?php }?> title="Print this voucher."><?php echo $this->escapeHtml($voucher->id); ?></a>
+		</div>
 		<?php endforeach; ?>
 	</td>
 </tr>

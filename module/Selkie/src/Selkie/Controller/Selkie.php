@@ -56,7 +56,7 @@ final class Selkie extends AbstractActionController
 
 		return array(
 			'isAdmin' => $admin,
-			'rolls'  => $this->getTable()->getAll($where),
+			'rolls'   => $this->_('Selkie\Model\RollTable')->getAll($where),
 		);
 	}
 
@@ -90,7 +90,7 @@ final class Selkie extends AbstractActionController
 				// @todo Activates the vouchers if necessary.
 
 				$roll->exchangeArray($data);
-				$this->getTable()->save($roll, $data['number']);
+				$this->_('Selkie\Model\RollTable')->save($roll, $data['number']);
 
 				return $this->redirect()->toRoute('selkie');
 			}
@@ -108,6 +108,8 @@ final class Selkie extends AbstractActionController
 			return $this->redirect()->toRoute('selkie');
 		}
 
+		$rolls = $this->_('Selkie\Model\RollTable');
+
 		$request = $this->getRequest();
 		if ($request->isPost())
 		{
@@ -117,15 +119,15 @@ final class Selkie extends AbstractActionController
 			{
 				// @todo Why? Shouldn't it be in the URL?
 				$id = (int) $request->getPost('id');
-				$this->getTable()->deleteRoll($id);
+				$rolls->delete($id);
 			}
 
 			return $this->redirect()->toRoute('selkie');
 		}
 
 		return array(
-			'id'      => $id,
-			'roll' => $this->getTable()->get($id)
+			'id'   => $id,
+			'roll' => $rolls->get($id)
 		);
 	}
 
@@ -137,13 +139,33 @@ final class Selkie extends AbstractActionController
 			return $this->redirect()->toRoute('selkie');
 		}
 
-		$roll  = $this->getTable()->get($id);
-		$jasper = $this->getServiceLocator()->get('Selkie\Jasper');
+		$vouchers = $this->_('Selkie\Model\VoucherGateway');
+		$voucher  = $vouchers->select(array('id' => $id))->current();
+		if (!$voucher)
+		{
+			return $this->redirect()->toRoute('selkie');
+		}
 
-		$pdf = $jasper->requestReport(get_object_vars($roll));
+		$roll = $this->_('Selkie\Model\RollTable')->get($voucher['roll_id']);
 
-		$roll->printed = true;
-		$this->getTable()->save($roll);
+		$pdf = $this->_('Selkie\Jasper')->requestReport(array(
+			'activation' => $roll->activation,
+			'comment'    => $roll->comment,
+			'creation'   => $roll->creation,
+			'creator'    => $roll->creator,
+			'duration'   => $roll->duration,
+			'roll'       => $roll->pfs_id,
+			'voucher'    => $voucher['id'],
+		));
+
+		// Updates the voucher if necessary.
+		if (!$voucher['printed'])
+		{
+			$vouchers->update(
+				array('printed' => true),
+				array('id'      => $voucher['id'])
+			);
+		}
 
 		header('Content-Type: application/pdf');
 		echo $pdf;
@@ -159,8 +181,7 @@ final class Selkie extends AbstractActionController
 			return $this->redirect()->toRoute('selkie');
 		}
 
-		$voucher = $this->getServiceLocator()
-			->get('Selkie\Model\VoucherGateway')
+		$voucher = $this->_('Selkie\Model\VoucherGateway')
 			->select(array('id' => $id))
 			->current();
 
@@ -183,10 +204,13 @@ final class Selkie extends AbstractActionController
 			return $this->redirect()->toRoute('selkie');
 		}
 
-		$roll = $this->getTable()->get($id);
-		$vouchers = $this->getServiceLocator()
-			->get('Selkie\Model\VoucherGateway')
-			->select(array('roll_id' => $id));
+		$roll = $this->_('Selkie\Model\RollTable')->get($id);
+		$vouchers = $this->_('Selkie\Model\VoucherGateway')
+			->select(
+				function (Select $select) use ($id) {
+					$select->where(array('roll_id' => $id))->order('id');
+				}
+			);
 
 		return array(
 			'isAdmin'  => $this->_isAdmin(),
@@ -202,10 +226,10 @@ final class Selkie extends AbstractActionController
 			$select->where('activation + CAST(duration || \' minutes\' AS INTERVAl) < NOW()');
 		};
 
-		$bg = $this->getServiceLocator()->get('Selkie\Model\RollTable');
+		$bg = $this->_('Selkie\Model\RollTable');
 		foreach ($bg->getAll($where) as $roll)
 		{
-			$bg->deleteRoll($roll);
+			$bg->delete($roll);
 		}
 
 		exit;
@@ -221,9 +245,7 @@ final class Selkie extends AbstractActionController
 
 			if ($form->isValid())
 			{
-				$sl = $this->getServiceLocator();
-
-				$auth = $sl->get('SelkieAuthService');
+				$auth = $this->_('SelkieAuthService');
 
 				$auth->getAdapter()
 					->setIdentity($request->getPost('username'))
@@ -233,7 +255,7 @@ final class Selkie extends AbstractActionController
 				$result = $auth->authenticate();
 				if ($result->isValid())
 				{
-					$conf = $sl->get('Config')['ldap'];
+					$conf = $this->_('Config')['ldap'];
 					if (!isset($conf['groupDn'], $conf['adminGroup'], $conf['userGroup']))
 					{
 						throw new Exception('Invalid LDAP configuration');
@@ -277,7 +299,7 @@ final class Selkie extends AbstractActionController
 
 					if ($allowed)
 					{
-						$sl->get('SelkieSession')['admin'] = $admin;
+						$this->_('SelkieSession')['admin'] = $admin;
 						return $this->redirect()->toRoute('selkie');
 					}
 					$auth->clearIdentity();
@@ -292,26 +314,11 @@ final class Selkie extends AbstractActionController
 
 	function logOutAction()
 	{
-		$auth = $this->getServiceLocator()->get('SelkieAuthService')->clearIdentity();
+		$auth = $this->_('SelkieAuthService')->clearIdentity();
 		return $this->redirect()->toRoute('selkie');
 	}
 
 	//--------------------------------------
-
-	/**
-	 * @return Selkie\Model\RollTable
-	 */
-	function getTable()
-	{
-		if (!$this->_table)
-		{
-			$this->_table = $this
-				->getServiceLocator()
-				->get('Selkie\Model\RollTable')
-				;
-		}
-		return $this->_table;
-	}
 
 	/**
 	 *
@@ -319,7 +326,7 @@ final class Selkie extends AbstractActionController
 	function onDispatch(MvcEvent $e)
 	{
 		$route = $e->getRouteMatch();
-		$auth  = $this->getServiceLocator()->get('SelkieAuthService');
+		$auth  = $this->_('SelkieAuthService');
 
 		if ('logIn' === $route->getParam('action'))
 		{
@@ -357,16 +364,19 @@ final class Selkie extends AbstractActionController
 	}
 
 	/**
-	 * @var Selkie\Model\RollTable
+	 *
 	 */
-	protected $_table;
+	private function _($service)
+	{
+		return $this->serviceLocator->get($service);
+	}
 
 	/**
 	 *
 	 */
 	private function _isAdmin()
 	{
-		return (bool) $this->getServiceLocator()->get('SelkieSession')['admin'];
+		return (bool) $this->_('SelkieSession')['admin'];
 	}
 
 	/**
@@ -374,6 +384,6 @@ final class Selkie extends AbstractActionController
 	 */
 	private function _getIdentity()
 	{
-		return $this->getServiceLocator()->get('SelkieAuthService')->getIdentity();
+		return $this->_('SelkieAuthService')->getIdentity();
 	}
 }

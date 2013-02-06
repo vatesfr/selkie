@@ -37,7 +37,7 @@ return array(
 					'route'	=> '/selkie[/:action][/:id]',
 					'constraints' => array(
 						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-						'id'	 => '[0-9]+',
+						'id'	 => '[a-zA-Z0-9]+',
 					),
 					'defaults' => array(
 						'controller' => 'Selkie\Controller\Selkie',

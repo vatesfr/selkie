@@ -41,9 +41,6 @@ CREATE TABLE "roll"
     -- When the roll was activated or NULL if it was not.
     "activation" TIMESTAMP DEFAULT NULL,
 
-    -- As the roll already be printed.
-    "printed" BOOLEAN NOT NULL DEFAULT FALSE,
-
     -- Identifier in pfSense.
     "pfs_id" INTEGER NOT NULL,
 
@@ -57,6 +54,9 @@ CREATE TABLE "voucher"
 
     -- Unique identifier.
     "id" TEXT NOT NULL,
+
+    -- Whether the voucher has already been printed.
+    "printed" BOOLEAN NOT NULL DEFAULT FALSE,
 
     PRIMARY KEY ("id"),
     FOREIGN KEY ("roll_id") REFERENCES "roll" ("id")

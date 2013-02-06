@@ -119,7 +119,7 @@ final class RollTable
 		}
 	}
 
-	function deleteRoll($roll)
+	function delete($roll)
 	{
 		if (is_numeric($roll))
 		{

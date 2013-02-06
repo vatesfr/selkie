@@ -52,12 +52,10 @@ $this->headTitle($title);
 	<td><?php echo ($roll->activation === null ? '<em>not activated</em>' : $this->escapeHtml($roll->activation));?></td>
 	<td><?php echo ($this->escapeHtml($roll->comment) ?: '<em>none</em>');?></td>
 	<td>
-		<a href="<?php echo $this->url('selkie',
-			array('action'=>'print', 'id' => $roll->id));?>"<?php if ($roll->printed) {?> class="muted"<?php }?>>Print</a>
 		<?php if ($this->isAdmin) { ?>
 		<a href="<?php echo $this->url('selkie',
 			array('action'=>'delete', 'id' => $roll->id));?>">Delete</a>
-		<?php } ?>
+		<?php } else { ?>&nbsp;<?php } ?>
 	</td>
 </tr>
 <?php endforeach; ?>
