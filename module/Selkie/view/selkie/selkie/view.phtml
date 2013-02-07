@@ -26,13 +26,13 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p class="pull-left">
-	<a href="<?php echo $this->url('selkie'); ?>">
+	<a href="<?php echo $this->url('selkie'); ?>" class="btn">
 		<i class="icon-arrow-left"></i> Rolls list
 	</a>
 </p>
 <?php if ($this->isAdmin) { ?>
 <p class="pull-right">
-	<a href="<?php echo $this->url('selkie', array('action'=>'delete', 'id' => $roll->id));?>">
+	<a href="<?php echo $this->url('selkie', array('action'=>'delete', 'id' => $roll->id));?>" class="btn btn-danger">
 		<i class="icon-remove"></i> Delete
 	</a>
 </p>

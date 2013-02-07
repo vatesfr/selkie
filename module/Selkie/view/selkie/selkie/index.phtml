@@ -43,7 +43,7 @@ $this->headTitle($title);
 	<th>Creation</th>
 	<th>Activation</th>
 	<th>Comment</th>
-	<th>&nbsp;</th>
+	<?php if ($this->isAdmin) { ?><th>&nbsp;</th><?php } ?>
 </tr>
 <?php foreach ($rolls as $roll): ?>
 <tr>
@@ -53,12 +53,12 @@ $this->headTitle($title);
 	<td><?php echo $this->escapeHtml($roll->creation);?></td>
 	<td><?php echo ($roll->activation === null ? '<em>not activated</em>' : $this->escapeHtml($roll->activation));?></td>
 	<td><?php echo ($this->escapeHtml($roll->comment) ?: '<em>none</em>');?></td>
-	<td>
-		<?php if ($this->isAdmin) { ?>
+	<?php if ($this->isAdmin) { ?>
+	<td style="text-align: center">
 		<a href="<?php echo $this->url('selkie',
-			array('action'=>'delete', 'id' => $roll->id));?>"><i class="icon-remove"></i> Delete</a>
-		<?php } else { ?>&nbsp;<?php } ?>
+			array('action'=>'delete', 'id' => $roll->id));?>" class="btn btn-danger"><i class="icon-remove"></i> Delete</a>
 	</td>
+	<?php } ?>
 </tr>
 <?php endforeach; ?>
 </table>

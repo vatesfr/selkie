@@ -36,7 +36,7 @@ $url = $this->url('selkie', array(
 <form action="<?php echo $url; ?>" method="post">
 <div>
     <input type="hidden" name="id" value="<?php echo (int) $roll->id; ?>" />
-    <input type="submit" name="del" value="Yes" />
-    <input type="submit" name="del" value="No" />
+    <input type="submit" name="del" class="btn btn-danger" value="Yes" />
+    <input type="submit" name="del" class="btn" value="No" />
 </div>
 </form>
