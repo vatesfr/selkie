@@ -21,9 +21,6 @@ return array(
 	'db' => array(
 		'driver'         => 'Pdo',
 		'dsn'            => 'pgsql:host=localhost;dbname=selkie',
-		'driver_options' => array(
-			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
-		),
 		'username'       => 'selkie',
 		'password'       => 'selkie',
 	),
@@ -41,14 +38,14 @@ return array(
 	),
 
 	'pfsense' => array(
-		'url' => 'https://pfsense.example.net/cp.php',
-		'key' => 'password',
+		'url' => '',
+		'key' => '',
 	),
 
 	'jasper' => array(
-		'url'      => 'http://jasper.example.net',
-		'username' => 'user',
-		'password' => 'password',
+		'url'      => '',
+		'username' => '',
+		'password' => '',
 
 		'format'   => '', // @todo
 		'report'   => '', // @todo
