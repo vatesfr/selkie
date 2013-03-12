@@ -34,11 +34,10 @@ return array(
 	),
 
 	'jasper' => array(
-		'url'      => 'http://jasper.example.net',
+		'url'      => 'http://jasper.example.net/jasperserver/services/repository',
+		'report'   => '/reports/Voucher/Voucher',
+
 		'username' => 'user',
 		'password' => 'password',
-
-		'format'   => '', // @todo
-		'report'   => '', // @todo
 	),
 );

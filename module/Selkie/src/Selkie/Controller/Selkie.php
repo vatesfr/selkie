@@ -33,10 +33,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
 /**
- * @todo Handle entering a voucher id.
- * @todo Handle clean up.
  *
- * @todo Test: Handle printing a voucher through Jasper.
  */
 final class Selkie extends AbstractActionController
 {
@@ -170,6 +167,7 @@ final class Selkie extends AbstractActionController
 			);
 		}
 
+		header('Content-Disposition: attachment; filename="'.$id.'.pdf"');
 		header('Content-Type: application/pdf');
 		echo $pdf;
 		exit;

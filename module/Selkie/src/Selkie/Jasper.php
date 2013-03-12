@@ -71,16 +71,19 @@ final class Jasper
 			));
 
 			$pdf = $this->parseReponseWithReportData(
-				$client->__getLastResponseHeaders(), $client->__getLastResponse());
+				$client->__getLastResponseHeaders(),
+				$client->__getLastResponse()
+			);
 		}
-		catch (SoapFault $exception)
+		catch (\SoapFault $exception)
 		{
 			$responseHeaders = $client->__getLastResponseHeaders();
 			if ($exception->faultstring == 'looks like we got no XML document' &&
 			    strpos($responseHeaders, 'Content-Type: multipart/related;') !== false)
 			{
 				$pdf = $this->parseReponseWithReportData($responseHeaders, $client->__getLastResponse());
-			} else
+			}
+			else
 			{
 				throw $exception;
 			}

@@ -114,8 +114,8 @@ final class Module
 						$conf['url'],
 						$conf['username'],
 						$conf['password'],
-						$conf['format'],
-						$conf['report']
+						$conf['report'],
+						'PDF'
 					);
 				},
 			),

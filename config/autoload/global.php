@@ -44,10 +44,9 @@ return array(
 
 	'jasper' => array(
 		'url'      => '',
+		'report'   => '',
+
 		'username' => '',
 		'password' => '',
-
-		'format'   => '', // @todo
-		'report'   => '', // @todo
 	),
 );
