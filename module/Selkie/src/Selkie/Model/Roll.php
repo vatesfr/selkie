@@ -51,14 +51,14 @@ final class Roll
 	public $duration;
 
 	/**
-	 * @var integer
+	 * @var string
 	 */
-	public $creation;
+	private $creation;
 
 	/**
-	 * @var null|integer
+	 * @var null|string
 	 */
-	public $activation;
+	private $activation;
 
 	/**
 	 * @var integer
@@ -169,6 +169,50 @@ final class Roll
             $this->_inputFilter = $inputFilter;
 		}
 		return $this->_inputFilter;
+	}
+
+	/**
+	 *
+	 */
+	public function __get($name)
+	{
+		if (('creation' === $name)
+			|| ('activation' === $name))
+		{
+			$value = $this->$name;
+			if (is_string($value))
+			{
+				$value = date(
+					'Y-m-d \a\t H:i',
+					strtotime($value)
+				);
+			}
+
+			return $value;
+		}
+
+		trigger_error(
+			'no such readable property '.get_class($this).'->'.$name,
+			E_USER_ERROR
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function __set($name, $value)
+	{
+		if (('creation' === $name)
+			|| ('activation' === $name))
+		{
+			$this->$name = $value;
+			return;
+		}
+
+		trigger_error(
+			'no such writable property '.get_class($this).'->'.$name,
+			E_USER_ERROR
+		);
 	}
 
 	/**
